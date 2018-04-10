@@ -27,6 +27,12 @@
 
 #define STATETOKENSIZE 13
 
+class CToken {
+ public:
+  std::string name;
+  size_t id;
+};
+
 class CRegEx {
   bool change;
   bool end;
@@ -53,7 +59,9 @@ class CRegEx {
 
   void operator()(const std::string &source);
   size_t operator[](const std::string& source);
-  size_t match(const std::string source, size_t begin, size_t &end);
+
+  std::vector<std::string> matchStr(const std::string source);
+  std::vector<CToken> matchToken(const std::string source);
   
   #ifdef DEBUG
   std::string print();

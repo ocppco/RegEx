@@ -48,6 +48,8 @@ int main(int argc, char *argv[]) {
   std::vector<std::string> errorString;
   std::vector<std::vector<size_t> > mesCompile;
   std::vector<std::vector<size_t> > mesMatch;
+  std::vector<std::string> testString;
+  std::vector<std::string> verfiyString;
   
   //Good tests
   //Test 0

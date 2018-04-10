@@ -604,30 +604,56 @@ size_t CRegEx::operator[](const std::string& source) {
   return (currentState==endState) ? currentStateOld : 0;
 }
 
-size_t CRegEx::match(const std::string source, size_t begin, size_t &end) {
-  size_t currentStateOld;
+std::vector<std::string> CRegEx::matchStr(const std::string source) {
+  std::vector<std::string> str;
 
-  index=begin;
-  currentState=1;  
-
-  if(begin>=source.size()) {
-    throw std::range_error(charToString("Out of source."));
-  }
-
+  indexOld=index=0;
+  
   do {
-    currentStateOld=currentState;
-    if(index<source.size()) { 
-      currentState=q[currentState].getNextState(source[index++]&0xFF);
-    }
-    else {
-      currentState=endState;
-    }
-  }while(currentState!=0 && currentState!=endState);
-
-  end=index-1;
+    currentState=1;
+    do {
+      if(index<source.size()) { 
+        currentState=q[currentState].getNextState(source[index++]&0xFF);
+      }
+      else {
+        currentState=endState;
+      }
+    }while(currentState!=0 && currentState!=endState);
+    str.push_back(source.substr(indexOld, indexOld-index));
+    indexOld=--index;
+  }while(index<source.size());
  
-  return (currentState==endState) ? currentStateOld : 0;
+  return str;
 }
+
+std::vector<CToken> CRegEx::matchToken(const std::string source) {
+  size_t currentStateOld;
+  CToken token;
+  std::vector<CToken> tokens;
+
+  indexOld=index=0;
+  
+  do {
+    currentStateOld=currentState=1;
+    do {
+      currentStateOld=currentState;
+      if(index<source.size()) { 
+        currentState=q[currentState].getNextState(source[index++]&0xFF);
+      }
+      else {
+        currentState=endState;
+      }
+    }while(currentState!=0 && currentState!=endState);
+    token.name=source.substr(indexOld, indexOld-index);
+    token.id=currentStateOld;
+    tokens.push_back(token);
+    indexOld=--index;
+  }while(index<source.size());
+ 
+  return tokens;
+}
+
+
 
 #ifdef DEBUG
 std::string CRegEx::print() {

@@ -22,8 +22,6 @@
 
 // Konstruktoren
 CState::CState() {
-  groupBegin=false;
-  groupEnd=false;
   clear();
 }
 

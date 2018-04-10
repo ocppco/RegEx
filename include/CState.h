@@ -30,8 +30,6 @@
 class CState {
   bool endState;
   bool mark;
-  bool groupBegin;
-  bool groupEnd;
   std::map<int, size_t> nextState;
  public:
   CState();
